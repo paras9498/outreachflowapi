@@ -1,0 +1,22 @@
+{
+  "name": "outreachflow-api",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node api/server.js",
+    "start:dev": "nodemon api/server.js"
+  },
+  "dependencies": {
+    "recharts": "^3.5.1",
+    "express": "^5.2.1",
+    "cors": "^2.8.5",
+    "mongodb": "^7.0.0",
+    "jsonwebtoken": "^9.0.3",
+    "@google/genai": "^1.30.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "typescript": "~5.8.2"
+  }
+}
