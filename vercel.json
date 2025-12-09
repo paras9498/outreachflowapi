@@ -2,7 +2,7 @@
   "version": 2,
   "functions": {
     "api/outreachflowapi/api/**/*.js": {
-      "runtime": "nodejs20.x"
+      "runtime": "nodejs18.x"
     }
   }
 }
