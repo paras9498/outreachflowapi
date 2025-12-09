@@ -1,6 +1,6 @@
-
 import express from 'express';
 import cors from 'cors';
+import serverless from 'serverless-http';
 import { connectDB, getUsersCollection } from './config/db.js';
 
 // Route Imports
@@ -13,7 +13,6 @@ import userRoutes from './routes/user.routes.js';
 import settingsRoutes from './routes/settings.routes.js';
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -24,8 +23,8 @@ app.use('/api/logs', logsRoutes);
 app.use('/api/companies', companyRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/settings', settingsRoutes);
-app.use('/api', aiRoutes);    
-app.use('/api', emailRoutes); 
+app.use('/api', aiRoutes);
+app.use('/api', emailRoutes);
 
 // Seed Default Admin
 const seedAdmin = async () => {
@@ -37,7 +36,7 @@ const seedAdmin = async () => {
             await users.insertOne({
                 id: 'admin-seed',
                 username: 'admin',
-                password: 'admin', // Plaintext for demo as requested
+                password: 'admin', // Plaintext for demo
                 role: 'ADMIN',
                 createdAt: Date.now()
             });
@@ -47,18 +46,20 @@ const seedAdmin = async () => {
     }
 };
 
-// Initialize Database and Start Server
-const startServer = async () => {
+// Initialize DB (Vercel recommends running async code inside handler)
+const initDB = async () => {
     try {
         await connectDB();
         await seedAdmin();
-        app.listen(port, () => {
-             console.log(`Server running on port ${port}`);
-        });
-    } catch (error) {
-        console.error("Failed to start server:", error);
-        process.exit(1);
+    } catch (err) {
+        console.error("DB init failed:", err.message);
     }
 };
 
-startServer();
+
+
+// Run DB init immediately
+initDB();
+
+// Export serverless handler for Vercel
+export const handler = serverless(app);
